@@ -36,17 +36,18 @@ class Carousel {
             let item = this.createDivWithClass('carousel__item')
             
             item.appendChild(child)
-            this.container.appendChild(item)
             return item
         })
         if(this.options.infinite) {
+            let offset = this.options.slidesVisible * 2 - 1
             this.items = [
-                ...this.items.slice(this.items.length - (this.options.slidesVisible * 2 - 1)),
+                ...this.items.slice(this.items.length - offset).map(item => item.cloneNode(true)),
                 ...this.items,
-                ...this.items.slice(0, this.options.slidesVisible * 2 - 1)
+                ...this.items.slice(0, offset).map(item => item.cloneNode(true))
             ]
-            console.log(this.items)
+            this.currentItem = offset
         }
+        this.items.forEach(item => this.container.appendChild(item))
         this.setStyle()
         if (this.options.navigation) {
             this.createNavigation()
@@ -56,7 +57,7 @@ class Carousel {
         }
 
         // Evenements
-        this.moveCallbacks.forEach(callback => callback(0))
+        this.moveCallbacks.forEach(callback => callback(this.currentItem))
         this.onWindowResize()
         window.addEventListener('resize', this.onWindowResize.bind(this))
         this.root.addEventListener('keyup', e => {
@@ -213,7 +214,7 @@ let onReady = function () {
 
     new Carousel (document.querySelector('#carousel2'), {
         slidesToScroll : 2,
-        slidesVisible : 3,
+        slidesVisible : 2,
         infinite: true
     })
 
