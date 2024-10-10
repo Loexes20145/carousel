@@ -6,14 +6,18 @@ class Carousel {
      * @param {Object} options 
      * @param {Object} [options.slideToScroll=1] Nombre d'éléments à faire défiler
      * @param {Object} [options.slideVisible=1] Nombre d'éléments visibles dans un slide
-     * @param {boolean} [options.loop=false] Doit-on bocler en fin de slide de carousel
+     * @param {boolean} [options.loop=false] Doit-on bocler en fin de slide de carouselcindex = 0
+     * @param {boolean} [options.pagination=false] 
+     * @param {boolean} [options.navigation=false] 
      */
     constructor (element, options = {}) {
         this.element = element
         this.options = Object.assign({}, {
             slidesToScroll: 1,
             slidesVisible: 1,
-            loop: false
+            loop: false,
+            pagination: false,
+            navigation: true
         }, options)
         this.currentItem = 0
         this.isMobile = false
@@ -34,7 +38,12 @@ class Carousel {
             return item
         })
         this.setStyle()
-        this.createNavigation()
+        if (this.options.navigation) {
+            this.createNavigation()
+        }
+        if (this.options.Pagination) {
+        this.createPagination()
+        }
 
         // Evenements
         this.moveCallbacks.forEach(callback => callback(0))
@@ -167,7 +176,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     new Carousel (document.querySelector('#carousel2'), {
         slidesToScroll : 2,
-        slidesVisible : 2
+        slidesVisible : 2,
+        pagination: true,
+        loop: true
     })
 
     new Carousel (document.querySelector('#carousel3'))
