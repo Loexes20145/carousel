@@ -9,6 +9,7 @@ class Carousel {
      * @param {boolean} [options.loop=false] Doit-on bocler en fin de slide de carouselcindex = 0
      * @param {boolean} [options.pagination=false] 
      * @param {boolean} [options.navigation=false] 
+     * @param {boolean} [options.infinite=false] 
      */
     constructor (element, options = {}) {
         this.element = element
@@ -17,7 +18,8 @@ class Carousel {
             slidesVisible: 1,
             loop: false,
             pagination: false,
-            navigation: true
+            navigation: true,
+            infinite: false
         }, options)
         this.currentItem = 0
         this.isMobile = false
@@ -37,6 +39,14 @@ class Carousel {
             this.container.appendChild(item)
             return item
         })
+        if(this.options.infinite) {
+            this.items = [
+                ...this.items.slice(this.items.length - (this.options.slidesVisible * 2 - 1)),
+                ...this.items,
+                ...this.items.slice(0, this.options.slidesVisible * 2 - 1)
+            ]
+            console.log(this.items)
+        }
         this.setStyle()
         if (this.options.navigation) {
             this.createNavigation()
@@ -203,9 +213,8 @@ let onReady = function () {
 
     new Carousel (document.querySelector('#carousel2'), {
         slidesToScroll : 2,
-        slidesVisible : 2,
-        pagination: true,
-        loop: true
+        slidesVisible : 3,
+        infinite: true
     })
 
     new Carousel (document.querySelector('#carousel3'))
