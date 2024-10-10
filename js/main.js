@@ -11,7 +11,6 @@ class Carousel {
     constructor (element, options = {}) {
         this.element = element
         this.options = Object.assign({}, {
-            // (!) Obligé de préciser les valeurs ici pour que le script fonctionne bien
             slidesToScroll: 1,
             slidesVisible: 1,
             loop: false
