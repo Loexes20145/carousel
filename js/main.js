@@ -8,7 +8,11 @@ class Carousel {
      * @param {Object} options.slideVisible Nombre d'éléments visibles dans un slide
      */
     constructor (element, options = {}) {
-
+        this.element = element
+        this.options = Object.assign({}, {
+            slideToScroll: 1,
+            slideVisible: 1
+        }, options)
     }
 }
 
