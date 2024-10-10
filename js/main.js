@@ -41,8 +41,8 @@ class Carousel {
         if (this.options.navigation) {
             this.createNavigation()
         }
-        if (this.options.Pagination) {
-        this.createPagination()
+        if (this.options.pagination) {
+            this.createPagination()
         }
 
         // Evenements
@@ -67,6 +67,10 @@ class Carousel {
         this.items.forEach(item => item.style.width = ((100/this.slidesVisible) / ratio) + "%")
     }
 
+    /**
+     * 
+     * Créer les flèches de navigation dans le DOM
+     */
     createNavigation () {
         let nextButton = this.createDivWithClass('carousel__next')
         let prevButton = this.createDivWithClass('carousel__prev')
@@ -87,6 +91,29 @@ class Carousel {
                 nextButton.classList.add('carousel__next--hidden')
             } else {
                 nextButton.classList.remove('carousel__next--hidden')
+            }
+        })
+    }
+
+    /**
+     * 
+     * Créer la pagination dans le DOM
+     */
+    createPagination () {
+        let pagination = this.createDivWithClass('carousel__pagination')
+        let buttons = []
+        this.root.appendChild(pagination)
+        for (let i = 0; i < this.items.length; i = i + this.options.slidesToScroll) {
+            let button = this.createDivWithClass('carousel__pagination__button')
+            button.addEventListener('click', () => this.gotoItem(i))
+            pagination.appendChild(button)
+            buttons.push(button)
+        }
+        this.onMove(index => {
+            let activeButton = buttons[Math.floor(index / this.options.slidesToScroll)]
+            if (activeButton) {
+                buttons.forEach(button => button.classList.remove('carousel__pagination__button--active'))
+                activeButton.classList.add('carousel__pagination__button--active')
             }
         })
     }
@@ -166,7 +193,7 @@ class Carousel {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+let onReady = function () {
 
     new Carousel (document.querySelector('#carousel1'), {
         slidesToScroll : 2,
@@ -182,4 +209,9 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     new Carousel (document.querySelector('#carousel3'))
-})
+}
+
+if (document.readyState !== 'loading') {
+    onReady()
+}
+document.addEventListener('DOMContentLoaded', onReady)
