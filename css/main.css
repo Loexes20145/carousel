@@ -55,3 +55,22 @@ body {
 .items {
     position: relative;
 }
+
+
+/**
+CAROUSEL
+*/
+.carousel {
+    position: relative;
+}
+
+.carousel__container::after {
+    content: '';
+    clear: both;
+    display: table;
+    overflow: hidden;
+}
+
+.carousel__item {
+    float: left;
+}

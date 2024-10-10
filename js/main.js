@@ -10,17 +10,20 @@ class Carousel {
     constructor (element, options = {}) {
         this.element = element
         this.options = Object.assign({}, {
-            slideToScroll: 1,
-            slideVisible: 1
+            slidesToScroll: 1,
+            slidesVisible: 3
         }, options)
         this.children = [].slice.call(element.children)
 
+        let ratio = this.children.length / this.options.slidesVisible
         let root = this.createDivWithClass('carousel')
         let container = this.createDivWithClass('carousel__container')
+        container.style.width = (ratio * 100) + "%"
         root.appendChild(container)
         this.element.appendChild(root)
         this.children.forEach((child) => {
             let item = this.createDivWithClass('carousel__item')
+            item.style.width = ((100/this.options.slidesVisible) / ratio) + "%"
             item.appendChild(child)
             container.appendChild(item)
         })
@@ -36,7 +39,6 @@ class Carousel {
 document.addEventListener('DOMContentLoaded', function () {
 
     new Carousel (document.querySelector('#carousel1')), {
-        slideToScroll : 3,
-        slideVisible : 3
+        slidesVisible : 3
     }
 })
