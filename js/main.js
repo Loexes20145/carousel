@@ -45,7 +45,7 @@ class Carousel {
                 ...this.items,
                 ...this.items.slice(0, offset).map(item => item.cloneNode(true))
             ]
-            this.gotoItem(offset)
+            this.gotoItem(offset, false)
         }
         this.items.forEach(item => this.container.appendChild(item))
         this.setStyle()
@@ -67,6 +67,9 @@ class Carousel {
                 this.prev()
             }
         })
+        if (this.options.infinite) {
+            this.container.addEventListener('transitionend', this.resetInfinite.bind(this))
+        }
     }
 
     /**
@@ -157,10 +160,22 @@ class Carousel {
             }
         }
         let translateX = index * -100 / this.items.length
+        if (animation === false) {
+            this.container.style.transition = 'none'
+        }
         this.container.style.transform = `translate3d(${translateX}%, 0, 0)`
+        this.container.offsetHeight // Force repaint
+        if (animation === false) {
+            this.container.style.transition = ''
+        }
         this.currentItem = index
         this.moveCallbacks.forEach(callback => callback(index))
     }
+
+    /**
+     * Déplace le container pour donner l'impression d'un slide infini
+     */
+    resetInfinite () {}
 
     /**
      * 
