@@ -45,7 +45,7 @@ class Carousel {
                 ...this.items,
                 ...this.items.slice(0, offset).map(item => item.cloneNode(true))
             ]
-            this.currentItem = offset
+            this.gotoItem(offset)
         }
         this.items.forEach(item => this.container.appendChild(item))
         this.setStyle()
@@ -140,8 +140,9 @@ class Carousel {
     /**
      * Déplace le carousel vers l'élément cible
      * @param {number} index 
+     * @param {boolean} [animation = true]
      */
-    gotoItem (index) {
+    gotoItem (index, animation = true) {
         if (index < 0) {
             if (this.options.loop) {
                 index = this.items.length - this.slidesVisible
