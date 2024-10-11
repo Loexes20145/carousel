@@ -21,6 +21,9 @@ class Carousel {
             navigation: true,
             infinite: false
         }, options)
+        if (this.options.loop && this.options.infinite) {
+            throw new Error('Un carousel ne peut être à la fois en boucle et en infini')
+        }
         this.currentItem = 0
         this.isMobile = false
         this.moveCallbacks = []
@@ -40,7 +43,10 @@ class Carousel {
             return item
         })
         if(this.options.infinite) {
-            this.offset = this.options.slidesVisible * 2
+            this.offset = this.options.slidesVisible + this.options.slidesToScroll
+            if (this.offset > children.length) {
+                console.error("Vous n'avez pas assez d'éléments dans le carousel", element)
+            }
             this.items = [
                 ...this.items.slice(this.items.length - this.offset).map(item => item.cloneNode(true)),
                 ...this.items,
@@ -238,8 +244,8 @@ let onReady = function () {
     })
 
     new Carousel (document.querySelector('#carousel2'), {
-        slidesToScroll : 2,
-        slidesVisible : 2,
+        slidesToScroll : 3,
+        slidesVisible : 3,
         infinite: true,
         pagination: true
     })
